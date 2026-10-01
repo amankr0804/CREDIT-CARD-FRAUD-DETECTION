@@ -26,13 +26,12 @@ An end-to-end machine learning project that detects fraudulent credit card trans
 
 - [11. Database (SQL) Design](https://claude.ai/chat/81dd428e-cda5-435f-83d8-b32bf4f70d38#-database-sql-design)
 
-- 12. 13. 14. Dashboard
+- [12. Dashboard]
 
-- [Results](https://claude.ai/chat/81dd428e-cda5-435f-83d8-b32bf4f70d38#-results)
+- [13.Results](https://claude.ai/chat/81dd428e-cda5-435f-83d8-b32bf4f70d38#-results)
 
-- [15. Future Improvements](https://claude.ai/chat/81dd428e-cda5-435f-83d8-b32bf4f70d38#-future-improvements)
+- [14. Future Improvements](https://claude.ai/chat/81dd428e-cda5-435f-83d8-b32bf4f70d38#-future-improvements)
 
-- [API Reference](https://claude.ai/chat/81dd428e-cda5-435f-83d8-b32bf4f70d38#-api-reference)
 
 ## Overview
 
