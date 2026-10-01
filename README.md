@@ -518,110 +518,9 @@ cm = confusion_matrix(y_test, y_pred)
 - Metrics comparison bar chart
 
 
-## Database (SQL) Design
-
-## sql/schema.sql
-
-```
-CREATE TABLE IF NOT EXISTS transactions (
-transaction_id INTEGER PRIMARY KEY AUTOINCREMENT,
-time_elapsed REAL,
-amount REAL NOT NULL,
-v1 REAL, v2 REAL, v3 REAL, v4 REAL, v5 REAL, v6 REAL, v7 REAL,
-v8 REAL, v9 REAL, v10 REAL, v11 REAL, v12 REAL, v13 REAL, v14 REAL,
-v15 REAL, v16 REAL, v17 REAL, v18 REAL, v19 REAL, v20 REAL, v21 REAL,
-v22 REAL, v23 REAL, v24 REAL, v25 REAL, v26 REAL, v27 REAL, v28 REAL,
-actual_class INTEGER, -- ground truth, if known
-created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-CREATE TABLE IF NOT EXISTS predictions (
-prediction_id INTEGER PRIMARY KEY AUTOINCREMENT,
-transaction_id INTEGER NOT NULL,
-model_name TEXT NOT NULL,
-fraud_probability REAL NOT NULL,
-predicted_class INTEGER NOT NULL,
-risk_level TEXT CHECK (risk_level IN
-('Low','Medium','High','Critical')),
-predicted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-FOREIGN KEY (transaction_id) REFERENCES transactions(transaction_id)
-);
-CREATE TABLE IF NOT EXISTS model_metrics (
-run_id INTEGER PRIMARY KEY AUTOINCREMENT,
-model_name TEXT NOT NULL,
-precision_ REAL,
-recall REAL,
-f1_score REAL,
-roc_auc REAL,
-pr_auc REAL,
-trained_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-Example analytical queries (sql/queries.sql)
--- Top 10 highest-risk transactions
-SELECT t.transaction_id, t.amount, p.model_name, p.fraud_probability, p.risk_level
-FROM predictions p
-JOIN transactions t ON t.transaction_id = p.transaction_id
-ORDER BY p.fraud_probability DESC
-LIMIT 10;
--- Count of transactions per risk level
-SELECT risk_level, COUNT(*) AS total
-FROM predictions
-GROUP BY risk_level;
--- Average fraud amount vs. legitimate amount
-SELECT actual_class, ROUND(AVG(amount), 2) AS avg_amount
-FROM transactions
-GROUP BY actual_class;
--- Latest metrics per model
-SELECT * FROM model_metrics ORDER BY trained_at DESC;
-```
-
-
-## API Reference
-
-Base URL: http://localhost:5000 (Flask) / http://localhost:8000 (FastAPI)
-
-| Method | Endpoint | Description |
-| --- | --- | --- |
-| GET / |   | Serves the dashboard |
-| POST | /api/predict | Predict fraud for a single transaction |
-| POST | /api/predict/batch Predict fraud for multiple transactions (JSON/CSV) |   |
-| GET | /api/metrics | Return evaluation metrics for all models |
-| GET | /api/transactions | List stored transactions with risk scores |
-| GET | /api/stats | Summary stats (totals, fraud rate, risk distribution) |
-| GET | Health check /api/health |   |
-
-## Example: Single Prediction
-
-## Request
-
-```
-curl -X POST http://localhost:8000/api/predict \
--H "Content-Type: application/json" \
--d '{
-"model": "xgboost",
-"features": {
-"Time": 406, "Amount": 149.62,
-"V1": -1.36, "V2": -0.07, "...": "...", "V28": -0.02
-}
-}'
-```
-
-## Response
-
-```
-{
-"model": "xgboost",
-"fraud_probability": 0.9231,
-"prediction": "Fraud",
-"risk_level": "Critical"
-}
-```
-
-FastAPI users get auto-generated interactive docs at /docs.
-
-
 ## Dashboard
 
-The web dashboard (HTML/CSS/JavaScript + Chart.js/Plotly) provides:
+The web dashboard provides:
 
 - KPI cards: total transactions, flagged frauds, fraud rate, total amount at risk
 
@@ -640,6 +539,9 @@ The web dashboard (HTML/CSS/JavaScript + Chart.js/Plotly) provides:
 - Time series view: fraud activity over time
 
 - Feature importance: top contributing features per model
+- <img width="1920" height="1080" alt="Screenshot (211)" src="https://github.com/user-attachments/assets/f0ff203d-92ce-4c3a-abae-88f1bc6c0d6a" />
+<img width="1920" height="1080" alt="Screenshot (212)" src="https://github.com/user-attachments/assets/36f8ee30-2873-4c70-9bdf-f3c258e17d9b" />
+
 
 
 ## Results
